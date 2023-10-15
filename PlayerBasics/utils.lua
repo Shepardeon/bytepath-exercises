@@ -40,3 +40,18 @@ function Resize(s)
     love.window.setMode(s*Game.w, s*Game.h)
     Game.sX, Game.sY = s, s
 end
+
+function PushRotate(x, y, ang)
+    love.graphics.push()
+    love.graphics.translate(x, y)
+    love.graphics.rotate(ang or 0)
+    love.graphics.translate(-x, -y)
+end
+
+function PushRotateScale(x, y, ang, sX, sY)
+    love.graphics.push()
+    love.graphics.translate(x, y)
+    love.graphics.rotate(ang or 0)
+    love.graphics.scale(sX or 1, sY or 1)
+    love.graphics.translate(-x, -y)
+end
