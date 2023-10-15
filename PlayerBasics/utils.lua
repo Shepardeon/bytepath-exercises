@@ -55,3 +55,12 @@ function PushRotateScale(x, y, ang, sX, sY)
     love.graphics.scale(sX or 1, sY or 1)
     love.graphics.translate(-x, -y)
 end
+
+function SetTimeScale(amount, duration)
+    Game.timeScale = amount
+    Game.globalTimer:tween("timeScale", duration, Game, { timeScale = 1 }, 'in-out-cubic')
+end
+
+function FlashScreen(frames)
+    Game.flashFrames = frames
+end

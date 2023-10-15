@@ -19,9 +19,11 @@ function love.load()
     RequireFiles(classFiles)
     
     GameCamera = Camera()
+    Game.globalTimer = Timer()
     love.math.setRandomSeed(os.time())
     love.graphics.setDefaultFilter("nearest", "nearest")
     love.graphics.setLineStyle("rough")
+    love.graphics.setBackgroundColor(Game.backgroundColor)
     Resize(3)
 
     -- GC infos
@@ -43,13 +45,25 @@ function love.load()
 end
 
 function love.update(dt)
-    if CurrRoom then CurrRoom:update(dt) end
-    GameCamera:update(dt)
+    Game.globalTimer:update(dt*Game.timeScale)
+    GameCamera:update(dt*Game.timeScale)
+    if CurrRoom then CurrRoom:update(dt*Game.timeScale) end
     Input:update(dt)
+
+    if Game.flashFrames then
+        Game.flashFrames = Game.flashFrames - 1
+        if Game.flashFrames < 0 then Game.flashFrames = nil end
+    end
 end
 
 function love.draw()
     if CurrRoom then CurrRoom:draw() end
+
+    if Game.flashFrames then
+        love.graphics.setColor(Game.backgroundColor)
+        love.graphics.rectangle('fill', 0, 0, Game.sX*Game.w, Game.sY*Game.h)
+        love.graphics.setColor(1, 1, 1)
+    end
 end
 
 -- HELPER FUNCTIONS

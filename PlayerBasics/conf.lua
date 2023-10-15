@@ -1,10 +1,4 @@
-Game = {
-    w = 480,
-    h = 270,
-    sX = 1,
-    sy = 1,
-    defaultColor = { 1, 1, 1, 1 }
-}
+require("globals")
 
 function love.conf(t)
     t.window.title = "BYTEPATH"

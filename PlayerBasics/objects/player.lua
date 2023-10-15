@@ -23,6 +23,8 @@ function Player:new(area, x, y, opts)
         self:shoot()
         self.timer:after(0.24/self.attackSpeed, f)
     end)
+
+    Input:bind("f4", function() self:die() end)
 end
 
 function Player:update(dt)
@@ -34,6 +36,9 @@ function Player:update(dt)
     self.vel = math.min(self.vel + self.accel * dt, self.maxVel)
     local goalX, goalY = self.x + self.vel * math.cos(self.ang) * dt, self.y + self.vel * math.sin(self.ang) * dt
     self.x, self.y = self.area.world:move(self, goalX, goalY, playerFilter)
+
+    if self.x < 0 or self.y < 0 then self:die() end
+    if self.x > Game.w or self.y > Game.h then self:die() end
 end
 
 function Player:draw()
@@ -85,4 +90,15 @@ function Player:shoot()
     -- spawnProjectile(self, dist)
 
     spawnProjectile(self, dist)
+end
+
+function Player:die()
+    self.dead = true
+    SetTimeScale(0.15, 1)
+    FlashScreen(4)
+    GameCamera:shake(6, 60, 0.4)
+
+    for _ = 1, Random(8, 12) do
+        self.area:addGameObject("ExplosionParticle", self.x, self.y)
+    end
 end
